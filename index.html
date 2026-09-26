@@ -3,156 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Happy Birthday! </title>
-   
+    <title>birthdayOS for Sisi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --purple: #6c4ab6;
+            --purple-dark: #432a78;
+            --purple-deep: #2b1b4e;
+            --lavender: #f5efff;
+            --muted: #d9c9f2;
+            --pink: #f0a6c8;
+            --yellow: #ffe49a;
+            --shadow: 0 8px 0 rgba(43, 27, 78, .35);
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; color: var(--lavender); background: var(--purple); font-family: "Comic Neue", cursive; }
+        button, select { font: inherit; }
+        button { cursor: pointer; }
+        .boot { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: var(--purple); }
+        .boot-box { width: min(440px, 100%); padding: 42px 28px; border: 3px solid var(--lavender); border-radius: 18px; text-align: center; background: var(--purple-dark); box-shadow: var(--shadow); }
+        .boot-box h1 { margin: 0; color: var(--yellow); font-size: clamp(2rem, 8vw, 3.8rem); }
+        .boot-box p { margin: 10px 0; font-size: 1.15rem; }
+        .boot-progress { width: 100%; height: 18px; margin: 28px 0 8px; border: 2px solid var(--lavender); border-radius: 5px; overflow: hidden; }
+        .boot-progress span { display: block; width: 100%; height: 100%; background: var(--pink); }
+        .boot-status { min-height: 25px; color: var(--muted); }
+        .enter, .small-button { border: 2px solid var(--lavender); border-radius: 8px; color: var(--purple-deep); background: var(--yellow); font-weight: 700; }
+        .enter { margin-top: 24px; padding: 10px 24px; }
+        .desktop { min-height: 100vh; padding: 32px 22px 48px; background: var(--purple); }
+        .desktop[hidden], .boot[hidden], .window[hidden] { display: none; }
+        .desktop-header { width: min(880px, 100%); margin: 0 auto 34px; text-align: center; }
+        .desktop-header h1 { margin: 0; font-size: clamp(2.5rem, 8vw, 5.5rem); color: #fff; }
+        .desktop-header p { margin: 6px 0 0; color: var(--muted); font-size: 1.15rem; }
+        .icons { display: grid; grid-template-columns: repeat(4, minmax(90px, 1fr)); gap: 16px; width: min(880px, 100%); margin: auto; }
+        .app-icon { min-height: 120px; padding: 14px 8px; border: 2px solid transparent; border-radius: 14px; color: var(--lavender); background: var(--purple-dark); box-shadow: var(--shadow); }
+        .app-icon:hover, .app-icon:focus-visible { border-color: var(--pink); outline: none; }
+        .app-icon b { display: block; font-size: 2.4rem; font-weight: 400; }
+        .app-icon span { display: block; margin-top: 8px; font-size: 1rem; }
+        .status { width: min(880px, 100%); min-height: 40px; margin: 28px auto 0; padding: 10px 14px; border-radius: 8px; color: var(--muted); text-align: center; background: rgba(43, 27, 78, .45); }
+        .system-info { width: min(880px, 100%); margin: 24px auto 0; padding: 16px; border: 2px dashed var(--muted); border-radius: 12px; color: var(--muted); background: rgba(43, 27, 78, .25); }
+        .system-info strong { color: var(--yellow); }
+        .shutdown { display: block; margin: 22px auto 0; padding: 9px 18px; border: 2px solid var(--pink); border-radius: 8px; color: var(--lavender); background: var(--purple-dark); font-weight: 700; }
+        .shutdown:hover, .shutdown:focus-visible { background: #57358d; outline: none; }
+        .goodbye { min-height: 100vh; display: grid; place-items: center; padding: 24px; text-align: center; background: var(--purple); }
+        .goodbye[hidden] { display: none; }
+        .goodbye h1 { margin: 0; color: var(--yellow); font-size: clamp(2rem, 8vw, 4rem); }
+        .goodbye p { font-size: 1.25rem; }
+        .window { position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; padding: 20px; background: rgba(34, 20, 61, .62); }
+        .window-card { width: min(620px, 100%); max-height: 88vh; overflow-y: auto; border: 3px solid var(--lavender); border-radius: 14px; background: var(--purple-deep); box-shadow: var(--shadow); }
+        .window-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 2px solid var(--purple); color: var(--yellow); background: var(--purple-dark); font-size: 1.2rem; }
+        .close { width: 32px; height: 32px; border: 2px solid var(--pink); border-radius: 7px; color: var(--lavender); background: transparent; font-weight: 700; }
+        .window-body { padding: 24px; }
+        .window-body h2 { margin: 0 0 18px; color: var(--yellow); font-size: clamp(1.7rem, 5vw, 2.6rem); }
+        .window-body p { line-height: 1.55; }
+        .player-controls { display: flex; justify-content: center; gap: 10px; margin: 24px 0; }
+        .small-button { padding: 8px 14px; }
+        .song-note { color: var(--pink); text-align: center; }
+        .question { margin: 0 0 20px; font-size: 1.3rem; color: var(--lavender); }
+        .answers { display: grid; gap: 10px; }
+        .answer { padding: 11px 14px; border: 2px solid var(--purple); border-radius: 8px; color: var(--lavender); text-align: left; background: var(--purple-dark); }
+        .answer:hover, .answer:focus-visible { border-color: var(--pink); outline: none; }
+        .answer:disabled { cursor: default; opacity: .7; }
+        .game-feedback { min-height: 28px; margin: 18px 0 0; color: var(--pink); font-weight: 700; }
+        .game-complete { padding: 28px 10px; text-align: center; }
+        .game-complete h2 { margin: 0; }
+        .game-complete p { color: var(--muted); }
+        .letter { padding: 25px; color: var(--lavender); background: #fffaff; }
+        .letter h2 { color: var(--purple-dark); }
+        .letter p { color: #35234e; }
+        .letter .sign { color: var(--purple); text-align: right; }
+        .locked { text-align: center; }
+        .locked .big { display: block; margin-bottom: 15px; font-size: 3rem; }
+        .unlocked { padding: 36px 20px; text-align: center; background: #fffaff; }
+        .unlocked h2, .unlocked p { color: var(--purple-dark); }
+        .unlocked .cake { margin: 18px 0; font-size: 3rem; }
+        @media (max-width: 680px) { .desktop { padding: 24px 14px 36px; } .icons { grid-template-columns: repeat(2, 1fr); } .app-icon { min-height: 100px; } .window-body { padding: 18px; } }
+    </style>
 </head>
-<body style="background-color: rgb(241, 233, 168);">
-  <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            box-sizing: border-box;
-            padding: 20px;
-            border: 30px solid #163e56;
-            display: block;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+<body>
+    <section class="boot" id="boot">
+        <div class="boot-box">
+            <h1>birthdayOS.exe</h1>
+            <p>loading birthday...</p>
+            <div class="boot-progress" aria-label="Loading complete"><span></span></div>
+            <p>100%</p>
+            <p class="boot-status" id="boot-status">warming up the birthday...</p>
+            <button class="enter" id="enter" disabled>please wait...</button>
+        </div>
+    </section>
+
+    <main class="desktop" id="desktop" hidden>
+        <header class="desktop-header"><h1>birthdayOS</h1><p>hello Sisi. please click around.</p></header>
+        <section class="icons" aria-label="BirthdayOS apps">
+            <button class="app-icon" data-open="soundtrack"><b>🎵</b><span>soundtrack</span></button>
+            <button class="app-icon" data-open="game"><b>🎮</b><span>mini game</span></button>
+            <button class="app-icon" data-open="letter"><b>💌</b><span>letter</span></button>
+            <button class="app-icon" data-open="surprise"><b>🎁</b><span>surprise</span></button>
+        </section>
+        <p class="status" id="status">this website has absolutely no practical purpose</p>
+        <div class="system-info"><strong>birthdayOS system info</strong><br>user: Sisi<br>age: classified<br>status: alive<br>battery: probably 12%<br>sleep schedule: nonexistent<br>braincells: loading...</div>
+        <button class="shutdown" id="shutdown">shut down birthdayOS</button>
+    </main>
+
+    <section class="window" id="soundtrack" hidden><div class="window-card"><div class="window-head">🎵 soundtrack <button class="close">×</button></div><div class="window-body"><h2>now playing:</h2><p><strong>Birthday song for Sisi</strong></p><p>the only song installed on this computer</p><div class="player-controls"><button class="small-button" id="play-song">play song</button></div><p class="song-note">this one reminded me of you lol</p><audio id="birthday-song" preload="auto" src="song.m4a"></audio></div></div></section>
+
+    <section class="window" id="game" hidden><div class="window-card"><div class="window-head">🎮 how well do you know yourself? <button class="close">×</button></div><div class="window-body" id="game-body"><p class="question" id="question"></p><div class="answers" id="answers"></div><p class="game-feedback" id="game-feedback"></p></div></div></section>
+
+    <section class="window" id="letter" hidden><div class="window-card"><div class="window-head">💌 important document <button class="close">×</button></div><article class="window-body letter"><h2>hey Sisi,</h2><p>happy birthday :)</p><p>I hope today is full of good food, funny conversations, and the exact amount of attention you want. You are one of those people who makes ordinary days feel less ordinary, mostly by being funny at completely inappropriate times and somehow making it work.</p><p>I hope this year is kind to you. I hope you do things that make you proud, find people who make you feel safe to be yourself, and remember that you do not have to have every single thing figured out right now.</p><p>Thank you for being you. That is the entire message, really. The rest is just decorative emotional nonsense because birthdays apparently require paragraphs.</p><p>Anyway enough emotional nonsense. Go enjoy your day and get something nice to eat.</p><p class="sign">- yb</p></article></div></section>
+
+    <section class="window" id="surprise" hidden><div class="window-card"><div class="window-head">🎁 surprise <button class="close">×</button></div><div class="window-body locked" id="locked"><span class="big">🔒</span><h2>unfortunately, this is locked.</h2><p>complete the stupid game first.</p></div><div class="window-body unlocked" id="unlocked" hidden><div class="cake">🎉 🎂 🎉</div><h2>HAPPY BIRTHDAY<br>SISI</h2><p>you are officially one year more experienced.</p><p>please accept this completely digital cake.</p></div></div></section>
+
+    <section class="goodbye" id="goodbye" hidden><div><h1>byebye sisi, ur the best</h1><p>birthdayOS is shutting down now.</p></div></section>
+
+    <script>
+        const boot = document.querySelector('#boot');
+        const desktop = document.querySelector('#desktop');
+        const enter = document.querySelector('#enter');
+        const bootStatus = document.querySelector('#boot-status');
+        const birthdaySong = document.querySelector('#birthday-song');
+        const goodbye = document.querySelector('#goodbye');
+        const status = document.querySelector('#status');
+        const messages = ['you clicked that. interesting.', 'this website has absolutely no practical purpose', 'loading braincells... still loading', 'okay that was a good choice', 'please enjoy this tiny purple computer'];
+        let messageIndex = 0;
+        let gameComplete = false;
+
+        const audioUrl = birthdaySong.src;
+        birthdaySong.load();
+        if ('caches' in window) {
+            caches.open('birthdayOS-audio-v1').then((cache) => cache.add(audioUrl)).catch(() => {});
         }
+        window.setTimeout(() => {
+            bootStatus.textContent = "okay we're done";
+            enter.disabled = false;
+            enter.textContent = 'enter :)';
+        }, 3000);
 
-        .card {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-        }
+        enter.addEventListener('click', () => { boot.hidden = true; desktop.hidden = false; });
+        document.querySelectorAll('[data-open]').forEach((icon) => {
+            icon.addEventListener('click', () => {
+                document.querySelector(`#${icon.dataset.open}`).hidden = false;
+                messageIndex = (messageIndex + 1) % messages.length;
+                status.textContent = messages[messageIndex];
+                if (icon.dataset.open === 'game') startGame();
+            });
+        });
+        document.querySelectorAll('.close').forEach((button) => button.addEventListener('click', () => { button.closest('.window').hidden = true; }));
 
-        .top-banner {
-            position: absolute;
-            top: 20px;
-            width: min(300px, 32vw);
-            max-width: 100%;
-            height: auto;
-            z-index: 2;
-        }
+        document.querySelector('#play-song').addEventListener('click', async (event) => {
+            if (birthdaySong.paused) {
+                await birthdaySong.play();
+                event.currentTarget.textContent = 'pause song';
+            } else {
+                birthdaySong.pause();
+                event.currentTarget.textContent = 'play song';
+            }
+        });
+        birthdaySong.addEventListener('ended', () => { document.querySelector('#play-song').textContent = 'play song'; });
 
-        .top-banner.left {
-            top: -90px;
-            left: -15px;
-        }
+        document.querySelector('#shutdown').addEventListener('click', () => {
+            if (!window.confirm('shut down birthdayOS?')) return;
+            birthdaySong.pause();
+            document.querySelectorAll('.window').forEach((windowElement) => { windowElement.hidden = true; });
+            desktop.hidden = true;
+            goodbye.hidden = false;
+            window.setTimeout(() => { window.close(); }, 1200);
+        });
 
-        .top-banner.right {
-            top: -90px;
-            right: -15px;
-        }
-
-        .top-banner.left.extra {
-            top: -90px;
-            left: 280px;
-        }
-
-        .top-banner.right.extra {
-            top: -90px;
-            right: 280px;
-        }
-
-        .top-image {
-            position: absolute;
-            left: 50%;
-            top: -200px;
-            transform: translateX(-50%);
-            display: block;
-            width: min(650px, 76vw);
-            max-width: 100%;
-            height: auto;
-            z-index: 2;
-        }
-
-        .star-link {
-            position: absolute;
-            left: 50%;
-            top: 54%;
-            transform: translate(-50%, -50%);
-            display: inline-block;
-            transition: transform 0.35s ease, filter 0.35s ease;
-        }
-
-        .star-link:hover {
-            transform: translate(-50%, -50%) scale(1.18);
-            filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.22));
-        }
-
-        img {
-            display: block;
-            width: 270px;
-            max-width: 100%;
-            height: auto;
-            transition: transform 0.35s ease, filter 0.35s ease;
-        }
-
-.star-link:hover img {
-            transform: scale(1.05);
-        }
-
-        .bottom-left-image {
-            position: absolute;
-            left: 160px;
-            bottom: 30px;
-            width: min(240px, 26vw);
-            max-width: 100%;
-            height: auto;
-            z-index: 2;
-            border-radius: 12px;
-        }
-
-        .bottom-right-image {
-            position: absolute;
-            right: 120px;
-            bottom: 100px;
-            width: min(240px, 26vw);
-            max-width: 100%;
-            height: auto;
-            z-index: 2;
-            border-radius: 12px;
-        }
-
-        .message-placeholder {
-            position: absolute;
-            left: 50%;
-            bottom: 40px;
-            transform: translateX(-50%);
-            width: min(500px, 80vw);
-            min-height: 80px;
-            padding: 12px 16px;
-            border: 2px dashed #163e56;
-            border-radius: 10px;
-            color: #163e56;
-            font-size: 24px;
-            line-height: 1.5;
-            text-transform: uppercase;
-            background: rgba(255, 255, 255, 0.15);
-        }
-  </style>
-
-  <div class="card">
-      <img class="top-banner left" src="pics/banner.png" alt="banner left">
-      <img class="top-banner left extra" src="pics/banner.png" alt="banner left extra">
-      <img class="top-banner right" src="pics/banner.png" alt="banner right">
-      <img class="top-banner right extra" src="pics/banner.png" alt="banner right extra">
-      <img class="top-image" src="pics/bday.png" alt="Happy Birthday">
-      <img class="bottom-left-image" src="pics/kat.png" alt="kat photo">
-      <img class="bottom-right-image" src="pics/dihno.png" alt="dino photo">
-
-      <a class="star-link" href="star.html">
-          <img src="pics/fstar.png" alt="star">
-      </a>
-
-      <div class="message-placeholder">
-          💙 CLICK THE STAR TO BEGIN 💙
-            <br>
-          WITH LOVE, FROM LILIBUD
-      </div>
-  </div>
+        const questions = [
+            ['What would you probably do right now?', ['go to sleep', 'eat something', 'overthink', 'all of the above'], 3],
+            ['What is your strongest skill?', ['being funny by accident', 'finding good snacks', 'pretending to be fine', 'all of the above'], 3],
+            ['What does a perfect plan need?', ['good people', 'good food', 'a little chaos', 'yes'], 3],
+            ['What should you get on your birthday?', ['cake', 'more cake', 'a break from responsibilities', 'yes'], 3],
+            ['Final question: are you loved?', ['obviously', 'probably', 'the evidence is overwhelming', 'yes'], 3]
+        ];
+        let questionIndex = 0;
+        function startGame() { questionIndex = 0; renderQuestion(); }
+        function renderQuestion() { const question = questions[questionIndex]; document.querySelector('#question').textContent = question[0]; document.querySelector('#game-feedback').textContent = ''; const answers = document.querySelector('#answers'); answers.innerHTML = ''; question[1].forEach((answer, index) => { const button = document.createElement('button'); button.className = 'answer'; button.textContent = answer; button.addEventListener('click', () => answerQuestion(index)); answers.append(button); }); }
+        function answerQuestion(answerIndex) { const feedback = document.querySelector('#game-feedback'); feedback.textContent = answerIndex === questions[questionIndex][2] ? 'correct 👍' : 'wrong. concerning.'; document.querySelectorAll('.answer').forEach((button) => button.disabled = true); setTimeoutNext(); }
+        function setTimeoutNext() { window.setTimeout(() => { questionIndex += 1; if (questionIndex === questions.length) { gameComplete = true; document.querySelector('#game-body').innerHTML = '<div class="game-complete"><h2>GAME COMPLETED</h2><p>wow you survived that</p><p>+100 aura</p><button class="small-button" id="unlock-now">open the surprise</button></div>'; document.querySelector('#unlock-now').addEventListener('click', () => { document.querySelector('#game').hidden = true; document.querySelector('#surprise').hidden = false; document.querySelector('#locked').hidden = true; document.querySelector('#unlocked').hidden = false; }); } else { renderQuestion(); } }, 500); }
+    </script>
 </body>
 </html>
