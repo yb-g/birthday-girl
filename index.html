@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sisiOS for Sisi</title>
+    <title>sisiOS for sisi</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
@@ -106,13 +106,13 @@
         <button class="shutdown" id="shutdown">shut down sisiOS</button>
     </main>
 
-    <section class="window" id="soundtrack" hidden><div class="window-card"><div class="window-head">🎵 soundtrack <button class="close">×</button></div><div class="window-body"><h2>now playing:</h2><p><strong>birthday song for sisi</strong></p><p>the only song installed on this kompooter</p><div class="player-controls"><button class="small-button" id="play-song">play song</button></div><p class="song-note">this one reminded me of you lol</p><audio id="birthday-song" preload="auto" src="song.m4a"></audio></div></div></section>
+    <section class="window" id="soundtrack" hidden><div class="window-card"><div class="window-head">🎵 soundtrack <button class="close">×</button></div><div class="window-body"><h2>now playing:</h2><p><strong>drunk</strong></p><p>the only song installed on this kompooter</p><div class="player-controls"><button class="small-button" id="play-song">play song</button></div><p class="song-note">this one reminded me of you lol</p><audio id="birthday-song" preload="auto" src="song.m4a"></audio></div></div></section>
 
     <section class="window" id="game" hidden><div class="window-card"><div class="window-head">🎮 how well do you know yourself? <button class="close">×</button></div><div class="window-body" id="game-body"><p class="question" id="question"></p><div class="answers" id="answers"></div><p class="game-feedback" id="game-feedback"></p></div></div></section>
 
-    <section class="window" id="letter" hidden><div class="window-card"><div class="window-head">💌 important document <button class="close">×</button></div><article class="window-body letter"><h2>hey sisi,</h2><p>happy birthday :D</p><p>i hope today is full of good food, funny conversations, and the exact amount of attention you want. ur one of those people who makes ordinary days feel less ordinary, mostly by being cute at completely random times and somehow making it work.</p><p>i hope this year is kind to you. i hope you do things that make you proud, find people who make you feel safe to be yourself, and remember that you do not have to have every single thing figured out right now. and ill always be there with you forever and ever okay? whether by physically or in ur heart (but mainly physically so dw)</p><p>Thank you for being you. That is the entire message, really. The rest is just decorative emotional nonsense because birthdays apparently require paragraphs. (or shit lines of code :D)</p><p>Anyway enough emotional shi. Go enjoy your day and get something nice to eat AND GET GOOD SLEEEPPPPPP.</p><p class="sign">- yb</p></article></div></section>
+    <section class="window" id="letter" hidden><div class="window-card"><div class="window-head">💌 important document <button class="close">×</button></div><article class="window-body letter"><h2>hai sisi,</h2><p>happy birthday :D</p><p>i hope today is full of good food, funny conversations, and exactly the amount of attention you want. ur one of those people who somehow makes normal days feel less normal, mostly by being cute at completely random times and NOT getting away with it.</p><p>i hope this year is kind to you. i hope you do things that make you proud, meet people who make you feel comfortable being yourself, and remember that you don't need to have everything figured out right now. and i'll always be there with you forever and ever okay? whether physically or somewhere in ur heart (but mainly physically so dw)</p><p>but mainly, thank you for being you. that's pretty much the whole message. the rest is decorative emotional nonsense because apparently birthdays require paragraphs. (or shit lines of code :D)</p><p>anyway enough emotional shi. go enjoy your day, get something nice to eat AND GET GOOD SLEEEPPPPPP.</p><p class="sign">- ur cutu, yb</p></article></div></section>
 
-    <section class="window" id="surprise" hidden><div class="window-card"><div class="window-head">🎁 surprise <button class="close">×</button></div><div class="window-body locked" id="locked"><span class="big">🔒</span><h2>unfortunately, this is locked.</h2><p>complete the crazy ahh game first.</p></div><div class="window-body unlocked" id="unlocked" hidden><div class="cake">🎂</div><h2>HAPPY BIRTHDAY<br>SISI</h2><p>you are officially one year more experienced.</p><p>please accept this completely digital cake.</p></div></div></section>
+    <section class="window" id="surprise" hidden><div class="window-card"><div class="window-head">🎁 surprise <button class="close">×</button></div><div class="window-body locked" id="locked"><span class="big">🔒</span><h2>unfortunately, ts is locked.</h2><p>complete the crazy ahh game first.</p></div><div class="window-body unlocked" id="unlocked" hidden><div class="cake">🎂</div><h2>HAPPY BIRTHDAY<br>SISI</h2><p>you are officially one year more experienced</p><p>please accept this completely digital cake :D</p></div></div></section>
 
     <section class="goodbye" id="goodbye" hidden><div><h1>byebye sisi, ur the best</h1><p>sisiOS is shutting down now.</p></div></section>
 
@@ -122,6 +122,7 @@
         const enter = document.querySelector('#enter');
         const bootStatus = document.querySelector('#boot-status');
         const birthdaySong = document.querySelector('#birthday-song');
+        const playSongButton = document.querySelector('#play-song');
         const goodbye = document.querySelector('#goodbye');
         const status = document.querySelector('#status');
         const messages = ['you clicked that. interesting.', 'this website has absolutely no practical purpose', 'loading braincells... still loading', 'okay that was a good choice', 'please enjoy this tiny purple kompooter :D'];
@@ -150,16 +151,25 @@
         });
         document.querySelectorAll('.close').forEach((button) => button.addEventListener('click', () => { button.closest('.window').hidden = true; }));
 
-        document.querySelector('#play-song').addEventListener('click', async (event) => {
+        function updateSongButton() {
+            playSongButton.textContent = birthdaySong.paused ? 'play song' : 'pause song';
+        }
+
+        playSongButton.addEventListener('click', async () => {
             if (birthdaySong.paused) {
-                await birthdaySong.play();
-                event.currentTarget.textContent = 'pause song';
+                playSongButton.textContent = 'pause song';
+                try {
+                    await birthdaySong.play();
+                } catch (error) {
+                    updateSongButton();
+                }
             } else {
                 birthdaySong.pause();
-                event.currentTarget.textContent = 'play song';
             }
         });
-        birthdaySong.addEventListener('ended', () => { document.querySelector('#play-song').textContent = 'play song'; });
+        birthdaySong.addEventListener('play', updateSongButton);
+        birthdaySong.addEventListener('pause', updateSongButton);
+        birthdaySong.addEventListener('ended', updateSongButton);
 
         document.querySelector('#shutdown').addEventListener('click', () => {
             if (!window.confirm('shut down sisiOS?')) return;
